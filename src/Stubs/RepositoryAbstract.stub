@@ -1,0 +1,192 @@
+<?php
+
+namespace {$NAMESPACE};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+
+abstract class RepositoryAbstract implements RepositoryInterface
+{
+    /**
+     * @var string Model name
+     */
+    protected $modelName;
+
+    /**
+     * @var Model
+     */
+    protected $model;
+
+    /**
+     * @var string Table name
+     */
+    protected $table;
+
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Find.
+     *
+     * @param int $id
+     *
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    public function find($id)
+    {
+        return $this->model->find($id);
+    }
+
+    /**
+     * Get all.
+     *
+     * @return Collection
+     */
+    public function all()
+    {
+        return $this->model->all();
+    }
+
+    /**
+     * Index.
+     *
+     * @param array $data
+     *
+     * @return Illuminate\Database\Eloquent\Collection|Illuminate\Contracts\Pagination\Paginator
+     */
+    public function index($data = [])
+    {
+        $perPage = !empty($data['perPage']) ? $data['perPage'] : 0;
+
+        if($perPage > 0) {
+            return $this->model->paginate($perPage);
+        }
+
+        return $this->all();
+    }
+
+    /**
+     * Check if model id is exist.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    public function existValidate($id)
+    {
+        if(!$this->exist($id)) {
+            abort(404, __(':name not found!', ['name' => __($this->modelName)]));
+        }
+    }
+
+    /**
+     * Store.
+     *
+     * @param array $data
+     *
+     * @return
+     */
+    public function store($data)
+    {
+        return $this->model->create($data);
+    }
+
+    /**
+     * Show.
+     *
+     * @param int $id
+     *
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    public function show($id)
+    {
+        return $this->find($id);
+    }
+
+    /**
+     * Update.
+     *
+     * @param int $id
+     * @param array $data
+     *
+     * @return Model
+     */
+    public function update($id, $data)
+    {
+        $model = $this->find($id);
+        $model->update($data);
+        return $model;
+    }
+
+    /**
+     * Update.
+     *
+     * @param array $condition
+     * @param array $data
+     *
+     * @return Model
+     */
+    public function updateWhere($condition, $data)
+    {
+        $model = $this->model::where($condition)->first();
+        $model->update($data);
+
+        return $model;
+    }
+
+    /**
+     * Delete.
+     *
+     * @param Collection|array|int $ids
+     *
+     * @return int
+     */
+    public function destroy($ids)
+    {
+        return $this->model->destroy($ids);
+    }
+
+    /**
+     * Check exist.
+     *
+     * @param int $id
+     *
+     * @return boolean
+     */
+    public function exist($id)
+    {
+        return !empty($this->find($id));
+    }
+
+    /**
+     * Store file.
+     *
+     * @param string $name
+     * @param string $path
+     *
+     * @return string
+     */
+    public function storeFile($name, $path)
+    {
+        if(request()->hasFile($name)) {
+            // Get filename with extension
+            $filenameWithExt = request()->file($name)->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = request()->file($name)->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = $filename.'_'.time().'_'. rand(1000, 9999) .'.'.$extension;
+            // Upload Image
+            $path = request()->file($name)->storeAs($path, $fileNameToStore);
+            return Storage::url($path);
+        }
+    }
+}

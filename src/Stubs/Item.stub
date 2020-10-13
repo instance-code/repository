@@ -1,0 +1,10 @@
+<?php
+
+namespace {$MODEL_NAMESPACE};
+
+use Illuminate\Database\Eloquent\Model;
+
+class {$ITEM_NAME} extends Model
+{
+    //
+}
