@@ -1,0 +1,19 @@
+<?php
+namespace {$NAMESPACE}\{$REPO_NAME};
+use {$NAMESPACE}\RepositoryAbstract;
+use {$MODEL_NAMESPACE}\{$ITEM_NAME};
+
+class {$ITEM_NAME}Repository extends RepositoryAbstract implements {$ITEM_NAME}Interface
+{
+    /**
+     * @var string
+     */
+    public function __construct({$ITEM_NAME} ${$DI})
+    {
+        parent::__construct();
+
+        $this->modelName = '{$ITEM_NAME}';
+        $this->model = ${$DI};
+        $this->table = '{$ITEM_TABLE}';
+    }
+}

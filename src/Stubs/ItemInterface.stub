@@ -1,0 +1,8 @@
+<?php
+namespace {$NAMESPACE}\{$REPO_NAME};
+
+use {$NAMESPACE}\RepositoryInterface;
+interface {$ITEM_NAME}Interface extends RepositoryInterface
+{
+
+}

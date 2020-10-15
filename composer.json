@@ -1,0 +1,16 @@
+{
+    "name": "instance-code/repository",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tan Nguyen",
+            "email": "tannq@fabbi.io"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "InstanceCode\\Repository\\": "src/"
+        }
+    }
+}
