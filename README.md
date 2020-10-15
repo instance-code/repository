@@ -4,7 +4,7 @@
 |---|---|
 | ^6.*  | ^dev  |
 
-`InstanceCode/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
+`instanceCode/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
 
 With one big added bonus that the original package didn't have: **tests**.
 
@@ -14,7 +14,7 @@ With one big added bonus that the original package didn't have: **tests**.
 To install through Composer, by run the following command:
 
 ``` bash
-composer require InstanceCode/repository
+composer require instanceCode/repository
 ```
 
 ## Lumen config
@@ -33,7 +33,7 @@ composer require InstanceCode/repository
 
  'aliases' => [
 	...
-	'Repo' => InstanceCode\Repository\Facades\Repository::class,
+	'Repository' => InstanceCode\Repository\Facades\Repository::class,
  ],
 ```
 
@@ -95,7 +95,7 @@ You'll find installation instructions and full documentation on : comming son...
 
 ## About InstanceCode/repository
 
-InstanceCode/repository is a freelance web developer specialising on the Laravel/lumen framework.
+instanceCode/repository is a freelance web developer specialising on the Laravel/lumen framework.
 
 
 ## License
