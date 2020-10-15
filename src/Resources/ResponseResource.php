@@ -1,6 +1,6 @@
 <?php
 
-namespace Sabirepo\Repository\Resources;
+namespace InstanceCode\Repository\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response as ResponseStatus;

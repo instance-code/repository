@@ -1,5 +1,5 @@
 <?php
-namespace Sabirepo\Repository\Exceptions;
+namespace InstanceCode\Repository\Exceptions;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -10,7 +10,7 @@ use Psy\Exception\FatalErrorException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-use Sabirepo\Repository\Facades\Repository as Repository;
+use InstanceCode\Repository\Facades\Repository as Repository;
 
 class RepositoryHandler extends ExceptionHandler
 {

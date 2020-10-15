@@ -1,8 +1,8 @@
 <?php
-namespace Sabirepo\Repository;
+namespace InstanceCode\Repository;
 
 use Illuminate\Support\Facades\File;
-use Sabirepo\Repository\Resources\ResponseResource;
+use InstanceCode\Repository\Resources\ResponseResource;
 class RepositoryBase {
     protected $ds = DIRECTORY_SEPARATOR;
     protected $permissions = 0755;

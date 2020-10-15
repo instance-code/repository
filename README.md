@@ -4,7 +4,7 @@
 |---|---|
 | ^6.*  | ^dev  |
 
-`sabirepo/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
+`InstanceCode/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
 
 With one big added bonus that the original package didn't have: **tests**.
 
@@ -14,13 +14,13 @@ With one big added bonus that the original package didn't have: **tests**.
 To install through Composer, by run the following command:
 
 ``` bash
-composer require sabirepo/repository
+composer require InstanceCode/repository
 ```
 
 ## Lumen config
 ``` bash
  //bootstrap\app.php
- Add : $app->register(Sabirepo\Repository\Providers\RepositoryServiceProvider::class);
+ Add : $app->register(InstanceCode\Repository\Providers\RepositoryServiceProvider::class);
 ```
 
 ## Laravel config
@@ -28,12 +28,12 @@ composer require sabirepo/repository
   //config\app.php
  'providers' => [
 	...
-	Sabirepo\Repository\Providers\RepositoryServiceProvider::class,
+	InstanceCode\Repository\Providers\RepositoryServiceProvider::class,
  ],
 
  'aliases' => [
 	...
-	'Repo' => Sabirepo\Repository\Facades\Repository::class,
+	'Repo' => InstanceCode\Repository\Facades\Repository::class,
  ],
 ```
 
@@ -79,7 +79,7 @@ Optionally, publish the package's configuration file by running:
 ### Visit: [Website](https://instance.asia)
 ### Response resource
 ```
-use Sabirepo\Repository\Facades\Repository as Repo;
+use InstanceCode\Repository\Facades\Repository as Repo;
 /**
  * $data: String | Object | Array
  * response interface: $data['status'] | $data['messages'] | $data['body']
@@ -93,9 +93,9 @@ You'll find installation instructions and full documentation on : comming son...
 ## Credits ....
 
 
-## About sabirepo/repository
+## About InstanceCode/repository
 
-sabirepo/repository is a freelance web developer specialising on the Laravel/lumen framework.
+InstanceCode/repository is a freelance web developer specialising on the Laravel/lumen framework.
 
 
 ## License

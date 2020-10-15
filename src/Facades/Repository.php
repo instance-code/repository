@@ -1,5 +1,5 @@
 <?php
-namespace Sabirepo\Repository\Facades;
+namespace InstanceCode\Repository\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -11,6 +11,6 @@ class Repository extends Facade
      * @return string
      */
     protected static function getFacadeAccessor() {
-        return 'sabirepo-repository';
+        return 'InstanceCode-repository';
     }
 }

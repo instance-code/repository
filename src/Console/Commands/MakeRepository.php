@@ -1,8 +1,8 @@
 <?php
-namespace Sabirepo\Repository\Console\Commands;
+namespace InstanceCode\Repository\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use Sabirepo\Repository\RepositoryBase as Repository;
+use InstanceCode\Repository\RepositoryBase as Repository;
 class MakeRepository extends Command {
     protected $repo;
     protected $namespace;

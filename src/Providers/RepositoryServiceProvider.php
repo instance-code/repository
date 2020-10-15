@@ -1,12 +1,12 @@
 <?php
-namespace Sabirepo\Repository\Providers;
+namespace InstanceCode\Repository\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use Sabirepo\Repository\Exceptions\RepositoryHandler;
+use InstanceCode\Repository\Exceptions\RepositoryHandler;
 class RepositoryServiceProvider extends ServiceProvider {
     public $commands = [
-        \Sabirepo\Repository\Console\Commands\MakeRepository::class
+        \InstanceCode\Repository\Console\Commands\MakeRepository::class
     ];
     /**
      * Register services.
@@ -16,8 +16,8 @@ class RepositoryServiceProvider extends ServiceProvider {
     public function register()
     {
         // register facades
-        $this->app->bind('sabirepo-repository', function() {
-            return new \Sabirepo\Repository\RepositoryBase;
+        $this->app->bind('InstanceCode-repository', function() {
+            return new \InstanceCode\Repository\RepositoryBase;
         });
 
         // merge config
