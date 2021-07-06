@@ -4,7 +4,7 @@
 |---|---|
 | ^6.*  | ^dev  |
 
-`instanceCode/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
+`instance-code/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
 
 With one big added bonus that the original package didn't have: **tests**.
 
@@ -14,7 +14,7 @@ With one big added bonus that the original package didn't have: **tests**.
 To install through Composer, by run the following command:
 
 ``` bash
-composer require instanceCode/repository
+composer require instance-code/repository
 ```
 
 ## Lumen config
@@ -38,24 +38,25 @@ composer require instanceCode/repository
 ```
 
 ## Setup repository
-``` Create repo 
+``` 
+  Create repo 
 	// Create folder default to app\repositories
 	php artisan make:repository {name} {--m}
     
-    // example: php artisan make:repository User
+  // example: php artisan make:repository User
     
-    // publish vendor
-    php artisan vendor:publish --tag=repository
+  // publish vendor
+  php artisan vendor:publish --tag=repository
 
 	// register provider
-    // add bindings to config/repository.php
-    /*
-     * Default binding
-     * [ RepoInterface::class => Repository::class ]
-     */
-    'bindings' => [
-        \App\Repositories\User\UserInterface::class => \App\Repositories\User\UserRepository::class,
-    ],
+  // add bindings to config/repository.php
+  /*
+   * Default binding
+   * [ RepoInterface::class => Repository::class ]
+   */
+  'bindings' => [
+      \App\Repositories\User\UserInterface::class => \App\Repositories\User\UserRepository::class,
+  ],
 
 
 ```
@@ -95,7 +96,7 @@ You'll find installation instructions and full documentation on : comming son...
 
 ## About InstanceCode/repository
 
-instanceCode/repository is a freelance web developer specialising on the Laravel/lumen framework.
+instance-code/repository is a freelance web developer specialising on the Laravel/lumen framework.
 
 
 ## License
