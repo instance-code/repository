@@ -3,7 +3,7 @@ namespace InstanceCode\Repository;
 
 use Illuminate\Support\Facades\File;
 use InstanceCode\Repository\Resources\ResponseResource;
-class RepositoryBase {
+class Helper {
     protected $ds = DIRECTORY_SEPARATOR;
     protected $permissions = 0755;
 
@@ -33,7 +33,7 @@ class RepositoryBase {
             $str .= $this->ds . $row;
             $path = base_path() . $str;
             if(!File::exists($path)) {
-                File::makeDirectory($path, $this->permissions,true,true);
+                File::makeDirectory($path, $this->permissions, true, true);
             }
         }
     }

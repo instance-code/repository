@@ -16,8 +16,8 @@ class RepositoryServiceProvider extends ServiceProvider {
     public function register()
     {
         // register facades
-        $this->app->bind('InstanceCode-repository', function() {
-            return new \InstanceCode\Repository\RepositoryBase;
+        $this->app->bind('instance-code-repository', function() {
+            return new \InstanceCode\Repository\Helper;
         });
 
         // merge config

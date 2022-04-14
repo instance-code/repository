@@ -11,6 +11,6 @@ class Repository extends Facade
      * @return string
      */
     protected static function getFacadeAccessor() {
-        return 'InstanceCode-repository';
+        return 'instance-code-repository';
     }
 }

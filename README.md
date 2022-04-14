@@ -80,12 +80,12 @@ Optionally, publish the package's configuration file by running:
 ### Visit: [Website](https://instance.asia)
 ### Response resource
 ```
-use InstanceCode\Repository\Facades\Repository as Repo;
+use InstanceCode\Repository\Facades\Repository as Response;
 /**
  * $data: String | Object | Array
  * response interface: $data['status'] | $data['messages'] | $data['body']
 */
-return Repo::response($data);
+return Response::response($data);
 
 ```
 You'll find installation instructions and full documentation on : comming son....
@@ -94,7 +94,7 @@ You'll find installation instructions and full documentation on : comming son...
 ## Credits ....
 
 
-## About InstanceCode/repository
+## About Instance-code/repository
 
 instance-code/repository is a freelance web developer specialising on the Laravel/lumen framework.
 

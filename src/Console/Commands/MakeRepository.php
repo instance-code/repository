@@ -2,7 +2,7 @@
 namespace InstanceCode\Repository\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use InstanceCode\Repository\RepositoryBase as Repository;
+use InstanceCode\Repository\Helper;
 class MakeRepository extends Command {
     protected $repo;
     protected $namespace;
@@ -22,7 +22,7 @@ class MakeRepository extends Command {
      */
     protected $description = 'Use: php artisan make:repository {name} {--m|model}';
 
-    public function __construct(Repository $repo)
+    public function __construct(Helper $repo)
     {
         parent::__construct();
         $this->repo = $repo;
@@ -98,7 +98,9 @@ class MakeRepository extends Command {
     {
         $className = Str::singular($dir);
         $path = $this->repoPath . DIRECTORY_SEPARATOR . $dir;
-        $di = strtolower(Str::plural($dir));
+        $plural = Str::plural($dir);
+        $di = lcfirst($plural);
+        $tbl = Str::snake($plural);
         $this->repo->createDirectoryIfNotExists($this->repoPath . DIRECTORY_SEPARATOR . $dir);
         $this->makeBaseTemplates([
             "{$className}Interface" => "ItemInterface",
@@ -106,7 +108,7 @@ class MakeRepository extends Command {
             ],
             $path ,
             ['{$NAMESPACE}', '{$REPO_NAME}', '{$ITEM_NAME}', '{$MODEL_NAMESPACE}', '{$DI}', '{$ITEM_TABLE}'],
-            [$this->namespace, $dir, $className, $this->modelNamespace, $di, $di]
+            [$this->namespace, $dir, $className, $this->modelNamespace, $di, $tbl]
         );
     }
 
