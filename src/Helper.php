@@ -1,8 +1,10 @@
 <?php
+
 namespace InstanceCode\Repository;
 
 use Illuminate\Support\Facades\File;
 use InstanceCode\Repository\Resources\ResponseResource;
+
 class Helper {
     protected $ds = DIRECTORY_SEPARATOR;
     protected $permissions = 0755;

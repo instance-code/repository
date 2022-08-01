@@ -1,5 +1,7 @@
 <?php
+
 namespace {$NAMESPACE}\{$REPO_NAME};
+
 use {$NAMESPACE}\RepositoryAbstract;
 use {$MODEL_NAMESPACE}\{$ITEM_NAME};
 

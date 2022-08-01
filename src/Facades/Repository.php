@@ -1,4 +1,5 @@
 <?php
+
 namespace InstanceCode\Repository\Facades;
 
 use Illuminate\Support\Facades\Facade;

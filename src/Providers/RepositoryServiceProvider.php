@@ -1,9 +1,12 @@
 <?php
+
 namespace InstanceCode\Repository\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+
 use InstanceCode\Repository\Exceptions\RepositoryHandler;
+
 class RepositoryServiceProvider extends ServiceProvider {
     public $commands = [
         \InstanceCode\Repository\Console\Commands\MakeRepository::class

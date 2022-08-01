@@ -1,8 +1,12 @@
 <?php
+
 namespace InstanceCode\Repository\Console\Commands;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+
 use InstanceCode\Repository\Helper;
+
 class MakeRepository extends Command {
     protected $repo;
     protected $namespace;
