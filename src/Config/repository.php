@@ -9,11 +9,14 @@ return [
     |
     */
     'path' => 'app/Repositories',
+    'service_path' => 'app/Services',
 
     /*
      * Default repository namespace
      */
     'namespace' => 'App\Repositories',
+
+    'service_namespace' => 'App\Services',
 
     'naming' => 'singular', // plural | singular
 
@@ -36,24 +39,11 @@ return [
         'path' => 'app/Models',
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Default handler
-    |--------------------------------------------------------------------------
-    | set false if want custom handler
-    | ValidationException
-    | UnauthorizedHttpException
-    | FatalErrorException
-    | QueryException
-    */
-    'default_handler' => true,
+    'bindingClass' => App\Providers\RepositoryServiceProvider::class,
 
     /*
      * Default binding
      * [ RepoInterface::class => Repository::class ]
      */
-    'bindings' => [
-
-    ],
-
+    'bindings' => [],
 ];

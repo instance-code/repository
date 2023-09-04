@@ -5,43 +5,13 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 
-use InstanceCode\Repository\Exceptions\RepositoryHandler;
-
 class RepositoryServiceProvider extends ServiceProvider {
     /**
-     * bindings.
+     * All of the container bindings that should be registered.
      *
-     * @return void
+     * @var array
      */
-    //    public $bindings = [];
-
-    /**
-     * bindings.
-     *
-     * @return void
-     */
-    public $singletons = [
-        ExceptionHandler::class => RepositoryHandler::class,
+    public $bindings = [
+        // \App\Repositories\Test\TestInterface::class => \App\Repositories\Test\TestRepository::class
     ];
-
-
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-
-    }
-
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-
-    }
 }

@@ -56,10 +56,9 @@ class Helper {
      * get templates
      * @var string
      */
-    public function getTemplate($templateFileName,$search=null,$replace=null)
+    public function getTemplate($templateFileName, $search=null, $replace=null): string
     {
         $template = File::get(__DIR__ . $this->ds . 'Stubs' . $this->ds . $templateFileName . '.stub');
-
         return str_replace($search, $replace, $template);
     }
 
@@ -67,13 +66,13 @@ class Helper {
      * create file
      * @var string
      */
-    public function createFile($files,$template)
+    public function createFile($files, $template)
     {
         $files = !is_array($files) ? [$files] : $files;
         foreach($files as $file) {
             $file = base_path($this->realPath($file));
             if(File::exists($file)) continue;
-            File::put($file,$template,false);
+            File::put($file, $template,false);
         }
     }
 
@@ -82,10 +81,10 @@ class Helper {
      *
      * @return mixed
      */
-    public function put($path,$tmp)
+    public function put($path, $tmp)
     {
         File::chmod($path, $this->permissions);
-        File::put($path,$tmp);
+        File::put($path, $tmp);
     }
 
     /**

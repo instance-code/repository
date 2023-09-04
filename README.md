@@ -39,17 +39,21 @@ composer require instance-code/repository
 
 ## Setup repository
 ``` 
-  Create repo 
-	// Create folder default to app\repositories
-	php artisan make:repository {name} {--m}
-    
-  // example: php artisan make:repository User
-    
   // publish vendor
   php artisan vendor:publish --tag=repository
 
-	// register provider
-  // add bindings to config/repository.php
+  Create repository
+  // Create folder default to app\repositories
+	php artisan make:repository {name} {--m}
+
+  Create Service 
+  // Create folder default to app\repositories
+	php artisan make:service {name}
+    
+  // example: php artisan make:repository User
+  // example: php artisan make:service User
+    
+  // add bindings to App\Providers\RepositoryServiceProvider Or config/repository.php to register repository
   /*
    * Default binding
    * [ RepoInterface::class => Repository::class ]
