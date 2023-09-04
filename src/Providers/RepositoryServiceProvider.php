@@ -5,12 +5,12 @@ namespace InstanceCode\Repository\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 
-use InstanceCode\Repository\Exceptions\RepositoryHandler;
-
 class RepositoryServiceProvider extends ServiceProvider {
     public $commands = [
-        \InstanceCode\Repository\Console\Commands\MakeRepository::class
+        \InstanceCode\Repository\Console\Commands\MakeRepository::class,
+        \InstanceCode\Repository\Console\Commands\MakeService::class,
     ];
+
     /**
      * Register services.
      *
@@ -28,18 +28,18 @@ class RepositoryServiceProvider extends ServiceProvider {
         __DIR__ . '/../Config/repository.php', 'repository'
         );
 
-        // binding repository
+        $bindingClass = config('repository.bindingClass');
+        if (@class_exists($bindingClass)) {
+            $this->app->register($bindingClass);
+        }
+
+        //binding repository
         foreach (config('repository.bindings') as $key => $value) {
             $this->app->bind($key, $value);
         }
 
         // register commands
         $this->commands($this->commands);
-
-        // default handler
-        if(config('repository.default_handler')) {
-            $this->app->singleton(ExceptionHandler::class, RepositoryHandler::class);
-        }
     }
 
     /**
@@ -52,8 +52,7 @@ class RepositoryServiceProvider extends ServiceProvider {
         // public config
         $this->publishes([
             __DIR__ . '/../Config' => config_path(),
-//            __DIR__ . '/../Stubs/RepositoryServiceProvider.stub' => app_path('Providers/RepositoryServiceProvider.php'),
+           __DIR__ . '/../Stubs/RepositoryServiceProvider.stub' => app_path('Providers/RepositoryServiceProvider.php'),
         ], 'repository');
     }
-
 }

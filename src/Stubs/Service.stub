@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {$NAMESPACE};
+
+class {$ITEM_NAME}Service extends BaseService
+{
+    public function __construct()
+    {
+
+    }
+}

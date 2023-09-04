@@ -7,33 +7,26 @@ use Illuminate\Support\Str;
 
 use InstanceCode\Repository\Helper;
 
-class MakeRepository extends Command {
+class MakeService extends Command {
     protected $helper;
     protected $namespace;
     protected $modelNamespace;
-    protected $modelPath;
-    protected $repoPath;
+    protected $path;
     protected $naming;
 
-    /**
-     * @var name: repo named
-     * @var --m: disabled auto create model
-     */
-    protected $signature = 'make:repository {name} {--m}';
+    protected $signature = 'make:service {name}';
 
     /**
      * @var string
      */
-    protected $description = 'Use: php artisan make:repository {name} {--m|model}';
+    protected $description = 'Use: php artisan make:service {name}';
 
     public function __construct(Helper $helper)
     {
         parent::__construct();
         $this->helper = $helper;
-        $this->namespace = config('repository.namespace');
-        $this->modelNamespace = config('repository.model.namespace');
-        $this->modelPath = config('repository.model.path');
-        $this->repoPath = config('repository.path');
+        $this->namespace = config('repository.service_namespace');
+        $this->path = config('repository.service_path');
         $this->naming = config('repository.naming', 'singular');
     }
 
@@ -44,32 +37,25 @@ class MakeRepository extends Command {
      */
     public function handle()
     {
-
         $arguments = $this->arguments();
         $name = ucwords($arguments['name']);
         $dir = $this->naming === 'plural' ? Str::plural($name) : Str::singular($name);
-        $this->makeBaseRepoIfNotExists();
+        $this->createBaseIfNotExists();
 
         // make repo
-        $this->makeRepo($dir);
-
-        // disabled auto create model
-        if(!$this->option('m')) {
-            $this->makeBaseModel($dir);
-        }
+        $this->createService($dir);
     }
 
     /**
      * init
      * @return void
      */
-    private function makeBaseRepoIfNotExists()
+    private function createBaseIfNotExists()
     {
-        $this->helper->createDirectoryIfNotExists($this->repoPath);
+        $this->helper->createDirectoryIfNotExists($this->path);
         $this->makeBaseTemplates([
-            'RepositoryInterface',
-            'RepositoryAbstract',
-        ], $this->repoPath, ['{$NAMESPACE}'], [$this->namespace]);
+            'BaseService',
+        ], $this->path, ['{$NAMESPACE}'], [$this->namespace]);
     }
 
     /**
@@ -98,17 +84,16 @@ class MakeRepository extends Command {
     /**
      * @param $dir
      */
-    private function makeRepo($dir)
+    private function createService($dir)
     {
         $className = Str::singular($dir);
-        $path = $this->repoPath . DIRECTORY_SEPARATOR . $dir;
+        $path = $this->path . DIRECTORY_SEPARATOR;
         $plural = Str::plural($dir);
         $di = lcfirst($plural);
         $tbl = Str::snake($plural);
-        $this->helper->createDirectoryIfNotExists($this->repoPath . DIRECTORY_SEPARATOR . $dir);
+        // $this->helper->createDirectoryIfNotExists($this->path . DIRECTORY_SEPARATOR . $dir);
         $this->makeBaseTemplates([
-            "{$className}Interface" => "ItemInterface",
-            "{$className}Repository" => "ItemRepository",
+            "{$className}Service" => "Service",
             ],
             $path ,
             ['{$NAMESPACE}', '{$REPO_NAME}', '{$ITEM_NAME}', '{$MODEL_NAMESPACE}', '{$DI}', '{$ITEM_TABLE}'],
@@ -116,20 +101,4 @@ class MakeRepository extends Command {
         );
     }
 
-    /**
-     * @param $dir
-     */
-    private function makeBaseModel($dir)
-    {
-        $className = Str::singular($dir);
-        $oldName = $className === 'User' ? $className : 'Item';
-        $this->helper->createDirectoryIfNotExists($this->modelPath);
-        $this->makeBaseTemplates([
-               $className => $oldName
-            ],
-            $this->modelPath ,
-            ['{$ITEM_NAME}', '{$MODEL_NAMESPACE}'],
-            [$className, $this->modelNamespace]
-        );
-    }
 }

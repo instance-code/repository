@@ -1,6 +1,8 @@
 {
     "name": "instance-code/repository",
     "license": "MIT",
+    "description": "A simple way to access repositories and services with laravel framework",
+    "keywords": ["laravel repository", "php repository", "instance-code"],
     "authors": [
         {
             "name": "Tan Nguyen",
