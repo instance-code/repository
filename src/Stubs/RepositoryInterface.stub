@@ -2,79 +2,97 @@
 
 namespace {$NAMESPACE};
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+
 interface RepositoryInterface
 {
+    /**
+     * Summary of getModel
+     * @return Model
+     */
+    public function getModel(): Model;
+
     /**
      * Find.
      *
      * @param int $id
      *
-     * @return Illuminate\Database\Eloquent\Model
+     * @return ?Model
      */
-    public function find($id);
+    public function find($id): ?Model;
 
     /**
      * Get all.
      *
      * @return Collection
      */
-    public function all();
+    public function all(): Collection;
 
     /**
      * Index.
      *
      * @param array $data
      *
-     * @return Collection|Paginator
+     * @return Collection
      */
-    public function index($data = []);
+    public function get();
 
     /**
-     * Check if model id is exist.
+     * search.
      *
-     * @param int $id
+     * @param Request $request
+     * @param array $conditions
      *
-     * @return void
+     * @return Collection|LengthAwarePaginator
      */
-    public function existValidate($id);
+    public function search(Request $request, array $conditions = []): Collection|LengthAwarePaginator;
 
     /**
      * Store.
      *
      * @param array $data
      *
-     * @return
+     * @return Model
      */
-    public function store($data);
-
-    /**
-     * Show.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\Database\Eloquent\Model
-     */
-    public function show($id);
+    public function store(array $data): Model;
 
     /**
      * Update.
      *
-     * @param int $id
+     * @param Model $item
      * @param array $data
      *
-     * @return Model
+     * @return ?Model
      */
-    public function update($id, $data);
+    public function update(Model $item, array $data): ?Model;
 
     /**
-     * Update.
+     * Retrieves the first record matching the specified attributes or creates a new one if it doesn't exist.
      *
-     * @param array $condition
-     * @param array $data
+     * This method checks the database for a record based on the given search criteria. If a match is found,
+     * it returns the existing record. If no match is found, it creates a new record using the search criteria
+     * combined with any additional attributes provided, then returns the newly created record.
      *
-     * @return Model
+     * @param array $attributes The search criteria to find the record (e.g., unique key like email).
+     * @param array $values Additional data to be used when creating a new record if none is found.
+     * @return Model The existing or newly created model instance.
      */
-    public function updateWhere($condition, $data);
+    public function firstOrCreate(array $conditions = [], array $values = []): Model;
+
+    /**
+     * Updates an existing record matching the specified attributes or creates a new one if it doesn't exist.
+     *
+     * This method searches for a record based on the given search criteria. If a match is found, it updates
+     * the record with the provided values and returns it. If no match is found, it creates a new record
+     * using a combination of the search criteria and the provided values, then returns the newly created record.
+     *
+     * @param array $conditions The search criteria to find the record (e.g., unique key like email).
+     * @param array $values The data to update the existing record or to include in the new record.
+     * @return Model The updated or newly created model instance.
+     */
+    public function updateOrCreate(array $conditions = [], array $values = []): Model;
 
     /**
      * Delete.
@@ -86,21 +104,29 @@ interface RepositoryInterface
     public function destroy($ids);
 
     /**
-     * Check exist.
+     * Performs an "insert or update" operation on multiple records in a single query.
      *
-     * @param int $id
+     * This method efficiently inserts new records or updates existing ones based on a unique key constraint.
+     * It takes an array of records and determines whether each record should be inserted or updated by checking
+     * the specified unique columns. If a record exists (matching the unique key), the specified columns are updated;
+     * otherwise, a new record is inserted with the provided data.
      *
-     * @return boolean
+     * @param array $values An array of records to insert or update, where each element is an associative array of column-value pairs.
+     * @param string|array $uniqueBy The column(s) that define the unique key constraint to determine if a record exists.
+     * @param string|array $update The column(s) to update if a matching record is found; all columns are inserted if no match exists.
+     * @return int The number of affected rows (inserted or updated).
      */
-    public function exist($id);
+    public function upsert(array $values, string|array $uniqueBy, string|array $update): int;
 
     /**
-     * Store file.
+     * Retrieves a database cursor for the query, returning records as a lazy collection.
      *
-     * @param string $name
-     * @param string $path
+     * This method executes the query and returns a LazyCollection that iterates over the results one record
+     * at a time using a database cursor. Unlike traditional methods like `get()`, which load all records
+     * into memory at once, `cursor()` minimizes memory usage by loading only the current record being
+     * processed. Ideal for handling large datasets efficiently.
      *
-     * @return string
+     * @return LazyCollection A lazy collection of model instances, fetched sequentially.
      */
-    public function storeFile($name, $path);
+    public function cursor(): LazyCollection;
 }

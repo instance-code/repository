@@ -2,34 +2,26 @@
 
 namespace {$NAMESPACE};
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 abstract class RepositoryAbstract implements RepositoryInterface
 {
-    /**
-     * @var string Model name
-     */
-    protected $modelName;
+    protected string $modelName;
+    protected Model $model;
+    protected string $table;
 
     /**
-     * @var Model
+     * Summary of getModel
+     * @return Model
      */
-    protected $model;
-
-    /**
-     * @var string Table name
-     */
-    protected $table;
-
-    /**
-     * Construct
-     *
-     * @return void
-     */
-    public function __construct()
+    public function getModel(): Model
     {
-
+        return $this->model;
     }
 
     /**
@@ -37,9 +29,9 @@ abstract class RepositoryAbstract implements RepositoryInterface
      *
      * @param int $id
      *
-     * @return Illuminate\Database\Eloquent\Model
+     * @return ?Model
      */
-    public function find($id)
+    public function find($id): ?Model
     {
         return $this->model->find($id);
     }
@@ -49,41 +41,41 @@ abstract class RepositoryAbstract implements RepositoryInterface
      *
      * @return Collection
      */
-    public function all()
+    public function all(): Collection
     {
         return $this->model->all();
     }
 
     /**
-     * Index.
+     * Get all.
      *
-     * @param array $data
-     *
-     * @return Illuminate\Database\Eloquent\Collection|Illuminate\Contracts\Pagination\Paginator
+     * @return Collection
      */
-    public function index($data = [])
+    public function get(): Collection
     {
-        $perPage = !empty($data['perPage']) ? $data['perPage'] : 0;
-
-        if($perPage > 0) {
-            return $this->model->paginate($perPage);
-        }
-
-        return $this->all();
+        return $this->model->get();
     }
 
     /**
-     * Check if model id is exist.
+     * search.
      *
-     * @param int $id
+     * @param Request $request
+     * @param array $conditions
      *
-     * @return void
+     * @return Collection|LengthAwarePaginator
      */
-    public function existValidate($id)
+    public function search(Request $request, array $conditions = []): Collection|LengthAwarePaginator
     {
-        if(!$this->exist($id)) {
-            abort(404, __(':name not found!', ['name' => __($this->modelName)]));
+        $perPage = (int) ($request->perPage ?? 0);
+        $model = $this->model;
+
+        if (!empty($conditions)) {
+            $model = $model->where($conditions);
         }
+
+        return $perPage > 0
+            ? $model->paginate($perPage)
+            : $model->get();
     }
 
     /**
@@ -91,54 +83,58 @@ abstract class RepositoryAbstract implements RepositoryInterface
      *
      * @param array $data
      *
-     * @return
+     * @return Model
      */
-    public function store($data)
+    public function store(array $data): Model
     {
         return $this->model->create($data);
     }
 
     /**
-     * Show.
+     * Update.
      *
-     * @param int $id
+     * @param Model $item
+     * @param array $data
      *
-     * @return Illuminate\Database\Eloquent\Model
+     * @return ?Model
      */
-    public function show($id)
+    public function update(Model $item, array $data): ?Model
     {
-        return $this->find($id);
+        $item->update($data);
+
+        return $item;
     }
 
     /**
-     * Update.
+     * Retrieves the first record matching the specified attributes or creates a new one if it doesn't exist.
      *
-     * @param int $id
-     * @param array $data
+     * This method checks the database for a record based on the given search criteria. If a match is found,
+     * it returns the existing record. If no match is found, it creates a new record using the search criteria
+     * combined with any additional attributes provided, then returns the newly created record.
      *
-     * @return Model
+     * @param array $attributes The search criteria to find the record (e.g., unique key like email).
+     * @param array $values Additional data to be used when creating a new record if none is found.
+     * @return Model The existing or newly created model instance.
      */
-    public function update($id, $data)
+    public function firstOrCreate(array $conditions = [], array $values = []): Model
     {
-        $model = $this->find($id);
-        $model->update($data);
-        return $model;
+        return $this->model->firstOrCreate($conditions, $values);
     }
 
     /**
-     * Update.
+     * Updates an existing record matching the specified attributes or creates a new one if it doesn't exist.
      *
-     * @param array $condition
-     * @param array $data
+     * This method searches for a record based on the given search criteria. If a match is found, it updates
+     * the record with the provided values and returns it. If no match is found, it creates a new record
+     * using a combination of the search criteria and the provided values, then returns the newly created record.
      *
-     * @return Model
+     * @param array $conditions The search criteria to find the record (e.g., unique key like email).
+     * @param array $values The data to update the existing record or to include in the new record.
+     * @return Model The updated or newly created model instance.
      */
-    public function updateWhere($condition, $data)
+    public function updateOrCreate(array $conditions = [], array $values = []): Model
     {
-        $model = $this->model::where($condition)->first();
-        $model->update($data);
-
-        return $model;
+        return $this->model->updateOrCreate($conditions, $values);
     }
 
     /**
@@ -154,39 +150,35 @@ abstract class RepositoryAbstract implements RepositoryInterface
     }
 
     /**
-     * Check exist.
+     * Performs an "insert or update" operation on multiple records in a single query.
      *
-     * @param int $id
+     * This method efficiently inserts new records or updates existing ones based on a unique key constraint.
+     * It takes an array of records and determines whether each record should be inserted or updated by checking
+     * the specified unique columns. If a record exists (matching the unique key), the specified columns are updated;
+     * otherwise, a new record is inserted with the provided data.
      *
-     * @return boolean
+     * @param array $values An array of records to insert or update, where each element is an associative array of column-value pairs.
+     * @param string|array $uniqueBy The column(s) that define the unique key constraint to determine if a record exists.
+     * @param string|array $update The column(s) to update if a matching record is found; all columns are inserted if no match exists.
+     * @return int The number of affected rows (inserted or updated).
      */
-    public function exist($id)
+    public function upsert(array $values, string|array $uniqueBy, string|array $update): int
     {
-        return !empty($this->find($id));
+        return $this->model->upsert($values, $uniqueBy, $update);
     }
 
     /**
-     * Store file.
+     * Retrieves a database cursor for the query, returning records as a lazy collection.
      *
-     * @param string $name
-     * @param string $path
+     * This method executes the query and returns a LazyCollection that iterates over the results one record
+     * at a time using a database cursor. Unlike traditional methods like `get()`, which load all records
+     * into memory at once, `cursor()` minimizes memory usage by loading only the current record being
+     * processed. Ideal for handling large datasets efficiently.
      *
-     * @return string
+     * @return LazyCollection A lazy collection of model instances, fetched sequentially.
      */
-    public function storeFile($name, $path)
+    public function cursor(): LazyCollection
     {
-        if(request()->hasFile($name)) {
-            // Get filename with extension
-            $filenameWithExt = request()->file($name)->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-            $extension = request()->file($name)->getClientOriginalExtension();
-            //Filename to store
-            $fileNameToStore = $filename.'_'.time().'_'. rand(1000, 9999) .'.'.$extension;
-            // Upload Image
-            $path = request()->file($name)->storeAs($path, $fileNameToStore);
-            return Storage::url($path);
-        }
+        return $this->model->cursor();
     }
 }

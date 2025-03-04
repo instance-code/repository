@@ -2,7 +2,7 @@
 
 | **Laravel/lumen**  |  **laravel-repository/lumen-repository** |
 |---|---|
-| ^6.*  | ^dev  |
+| ^11.*  | ^dev  |
 
 `instance-code/repository` is a Laravel package which created to manage your large  Laravel app using repository. Repository is like a Laravel package. This package is supported and tested in Laravel 5.*
 
@@ -25,16 +25,10 @@ composer require instance-code/repository
 
 ## Laravel config
 ``` bash
-  //config\app.php
- 'providers' => [
-	...
-	InstanceCode\Repository\Providers\RepositoryServiceProvider::class,
- ],
-
- 'aliases' => [
-	...
-	'Repository' => InstanceCode\Repository\Facades\Repository::class,
- ],
+  //bootstrap\app.php
+ ->withProviders([
+    \InstanceCode\Repository\Providers\CommandServiceProvider::class,
+])
 ```
 
 ## Setup repository
@@ -84,12 +78,12 @@ Optionally, publish the package's configuration file by running:
 ### Visit: [Website](https://instance.asia)
 ### Response resource
 ```
-use InstanceCode\Repository\Facades\Repository as Response;
+use InstanceCode\Repository\Facades\UseRepository;
 /**
  * $data: String | Object | Array
  * response interface: $data['status'] | $data['messages'] | $data['body']
 */
-return Response::response($data);
+return UseRepository::response($data);
 
 ```
 You'll find installation instructions and full documentation on : comming son....

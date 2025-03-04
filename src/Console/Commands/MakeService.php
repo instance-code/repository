@@ -7,7 +7,8 @@ use Illuminate\Support\Str;
 
 use InstanceCode\Repository\Helper;
 
-class MakeService extends Command {
+class MakeService extends Command
+{
     protected $helper;
     protected $namespace;
     protected $modelNamespace;
@@ -63,10 +64,10 @@ class MakeService extends Command {
      * if $key of $names is string, output file name is $key
      * @return void
      */
-    private function makeBaseTemplates($names, $path, array $search = null, array $replace = null)
+    private function makeBaseTemplates($names, $path, array $search = [], array $replace = [])
     {
         $names = is_array($names) ? $names : [$names];
-        foreach($names as $k => $v) {
+        foreach ($names as $k => $v) {
             $template = $this->helper->getTemplate(
                 $v,
                 $search,
@@ -92,13 +93,13 @@ class MakeService extends Command {
         $di = lcfirst($plural);
         $tbl = Str::snake($plural);
         // $this->helper->createDirectoryIfNotExists($this->path . DIRECTORY_SEPARATOR . $dir);
-        $this->makeBaseTemplates([
-            "{$className}Service" => "Service",
+        $this->makeBaseTemplates(
+            [
+                "{$className}Service" => "Service",
             ],
-            $path ,
+            $path,
             ['{$NAMESPACE}', '{$REPO_NAME}', '{$ITEM_NAME}', '{$MODEL_NAMESPACE}', '{$DI}', '{$ITEM_TABLE}'],
             [$this->namespace, $dir, $className, $this->modelNamespace, $di, $tbl]
         );
     }
-
 }

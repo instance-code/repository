@@ -5,7 +5,8 @@ namespace InstanceCode\Repository\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 
-class RepositoryServiceProvider extends ServiceProvider {
+class CommandServiceProvider extends ServiceProvider
+{
     public $commands = [
         \InstanceCode\Repository\Console\Commands\MakeRepository::class,
         \InstanceCode\Repository\Console\Commands\MakeService::class,
@@ -19,13 +20,14 @@ class RepositoryServiceProvider extends ServiceProvider {
     public function register()
     {
         // register facades
-        $this->app->bind('instance-code-repository', function() {
+        $this->app->bind('instance-code-repository', function () {
             return new \InstanceCode\Repository\Helper;
         });
 
         // merge config
         $this->mergeConfigFrom(
-        __DIR__ . '/../Config/repository.php', 'repository'
+            __DIR__ . '/../Config/repository.php',
+            'repository'
         );
 
         $bindingClass = config('repository.bindingClass');
@@ -52,7 +54,7 @@ class RepositoryServiceProvider extends ServiceProvider {
         // public config
         $this->publishes([
             __DIR__ . '/../Config' => config_path(),
-           __DIR__ . '/../Stubs/RepositoryServiceProvider.stub' => app_path('Providers/RepositoryServiceProvider.php'),
+            __DIR__ . '/../Stubs/RepositoryServiceProvider.stub' => app_path('Providers/RepositoryServiceProvider.php'),
         ], 'repository');
     }
 }

@@ -17,11 +17,11 @@ class ResponseResource extends JsonResource
      */
     public function toArray($request)
     {
-        if(is_object($this->resource)) {
+        if (is_object($this->resource)) {
             $status = property_exists($this->resource, 'status') ? $this->resource->status : ResponseStatus::HTTP_OK;
             $messages = property_exists($this->resource, 'messages') ?  $this->resource->messages : [];
             $body = property_exists($this->resource, 'body') ?  $this->resource->body : $this->resource;
-        } elseif(is_array($this->resource)) {
+        } elseif (is_array($this->resource)) {
             $status = Arr::exists($this->resource, 'status') ? $this->resource['status'] : ResponseStatus::HTTP_OK;
             $messages = Arr::exists($this->resource, 'messages') ? $this->resource['messages'] : [];
             $body = Arr::exists($this->resource, 'body') ? $this->resource['body'] : [];
@@ -32,10 +32,8 @@ class ResponseResource extends JsonResource
         }
 
         return [
-            'head' => [
-                'status' => $status,
-                "messages" => $messages
-            ],
+            'status' => $status,
+            'messages' => $messages,
             'body' => $body,
         ];
     }

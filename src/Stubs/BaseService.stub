@@ -6,8 +6,5 @@ namespace {$NAMESPACE};
 
 class BaseService
 {
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 }

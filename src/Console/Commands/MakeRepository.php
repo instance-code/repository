@@ -7,7 +7,8 @@ use Illuminate\Support\Str;
 
 use InstanceCode\Repository\Helper;
 
-class MakeRepository extends Command {
+class MakeRepository extends Command
+{
     protected $helper;
     protected $namespace;
     protected $modelNamespace;
@@ -54,7 +55,7 @@ class MakeRepository extends Command {
         $this->makeRepo($dir);
 
         // disabled auto create model
-        if(!$this->option('m')) {
+        if (!$this->option('m')) {
             $this->makeBaseModel($dir);
         }
     }
@@ -77,10 +78,10 @@ class MakeRepository extends Command {
      * if $key of $names is string, output file name is $key
      * @return void
      */
-    private function makeBaseTemplates($names, $path, array $search = null, array $replace = null)
+    private function makeBaseTemplates($names, $path, array $search = [], array $replace = [])
     {
         $names = is_array($names) ? $names : [$names];
-        foreach($names as $k => $v) {
+        foreach ($names as $k => $v) {
             $template = $this->helper->getTemplate(
                 $v,
                 $search,
@@ -106,11 +107,12 @@ class MakeRepository extends Command {
         $di = lcfirst($plural);
         $tbl = Str::snake($plural);
         $this->helper->createDirectoryIfNotExists($this->repoPath . DIRECTORY_SEPARATOR . $dir);
-        $this->makeBaseTemplates([
-            "{$className}Interface" => "ItemInterface",
-            "{$className}Repository" => "ItemRepository",
+        $this->makeBaseTemplates(
+            [
+                "{$className}Interface" => "ItemInterface",
+                "{$className}Repository" => "ItemRepository",
             ],
-            $path ,
+            $path,
             ['{$NAMESPACE}', '{$REPO_NAME}', '{$ITEM_NAME}', '{$MODEL_NAMESPACE}', '{$DI}', '{$ITEM_TABLE}'],
             [$this->namespace, $dir, $className, $this->modelNamespace, $di, $tbl]
         );
@@ -124,10 +126,11 @@ class MakeRepository extends Command {
         $className = Str::singular($dir);
         $oldName = $className === 'User' ? $className : 'Item';
         $this->helper->createDirectoryIfNotExists($this->modelPath);
-        $this->makeBaseTemplates([
-               $className => $oldName
+        $this->makeBaseTemplates(
+            [
+                $className => $oldName
             ],
-            $this->modelPath ,
+            $this->modelPath,
             ['{$ITEM_NAME}', '{$MODEL_NAMESPACE}'],
             [$className, $this->modelNamespace]
         );
